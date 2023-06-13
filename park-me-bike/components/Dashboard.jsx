@@ -7,7 +7,7 @@ import * as Location from 'expo-location';
 export default function Dashboard() {
   const [locationParams, setLocationParams] = useState({
     currLocation: {},
-    radius: 15,
+    radius: 30,
   });
   const [errorMsg, setErrorMsg] = useState(null);
 
@@ -25,9 +25,9 @@ export default function Dashboard() {
         if(location == null) {
           fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         } else {
-          setLocationParams({
+          setLocationParams({   
             ...locationParams, 
-            currLocation: {latitude: 53.69123014148644, longitude: -2.5673851}, 
+            currLocation: {latitude: location.coords.latitude, longitude: location.coords.longitude}, 
           });
         }
       })

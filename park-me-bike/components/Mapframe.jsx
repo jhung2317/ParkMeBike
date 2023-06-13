@@ -1,26 +1,26 @@
 import { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';// Import Map and Marker
-import MapView, { Marker } from 'react-native-maps';
-// import { getExampleDataFromCS } from '../utils/fetchData'
-// import ParkingLots from './ParkingLots';
+import MapView, { Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import { fetchParking } from '../utils/api';
+import ParkingLots from './ParkingLots';
 
 export default function MapFrame({locationParams}) {
     const [pointsOfInterest, setPointsOfInterest] = useState([])
     const combinedDependency = [locationParams.currLocation || locationParams.radius]
   
-    // useEffect(() => {
-    //   getExampleDataFromCS(locationParams)
-    //   .then(({features}) => {
-    //         setPointsOfInterest([...features])
-    //     })
-    //   .catch(err => console.log(err))
-    // }, combinedDependency)
+    useEffect(() => {
+      fetchParking(locationParams)
+      .then(({features}) => {
+            setPointsOfInterest([...features])
+        })
+      .catch(err => console.log(err))
+    }, combinedDependency)
 
     if (locationParams.currLocation != null) {
         return (
             <SafeAreaView style={{flex: 1}}>
                 <View style={styles.container}>
-                    <MapView
+                    <MapView provider={PROVIDER_GOOGLE}
                         style={styles.mapStyle}
                         initialRegion={{
                             latitude: locationParams.currLocation.latitude,
@@ -39,8 +39,7 @@ export default function MapFrame({locationParams}) {
                         />
                     {
                         pointsOfInterest.map(({properties, geometry}) => {
-                            console.log(geometry)
-                            // return <ParkingLots properties={properties} geometry={geometry} key={properties.id} />
+                             return <ParkingLots properties={properties} geometry={geometry} key={properties.id} />
                         })
                     }
                     </MapView>
