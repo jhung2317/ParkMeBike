@@ -25,8 +25,11 @@ export default function MapFrame({locationParams}) {
                         initialRegion={{
                             latitude: locationParams.currLocation.latitude,
                             longitude: locationParams.currLocation.longitude,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
+                            // latitudeDelta: 0.0922,
+                            // longitudeDelta: 0.0421,
+                            latitudeDelta: 0.1,
+                            longitudeDelta: 0.1
+
                         }}
                     >
                         <Marker
