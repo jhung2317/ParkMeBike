@@ -8,10 +8,13 @@ import Slider from '@react-native-community/slider'
 
 
 export default function Dashboard() {
+  const [currLocation, setCurrLocation] = useState({});
+
   const [locationParams, setLocationParams] = useState({
-    currLocation: {},
-    radius: 30,
+    location: {...currLocation},
+    radius: 10,
   });
+ 
   const [errorMsg, setErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(true)
 
@@ -29,10 +32,10 @@ export default function Dashboard() {
         if(location == null) {
           fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         } else {
-          setLocationParams({   
-            ...locationParams, 
-            currLocation: {latitude: location.coords.latitude, longitude: location.coords.longitude}, 
+          setCurrLocation({    
+            latitude: location.coords.latitude, longitude: location.coords.longitude
           });
+          console.log(currLocation)
           setIsLoading(false)
         }
       })
@@ -41,27 +44,28 @@ export default function Dashboard() {
 
   if(isLoading){
     return(
-      <Text>Loading</Text>
+      <Text>Fetching cycleparking...</Text>
     )
   }
 
-  if (locationParams.currLocation) {
+  if (currLocation) {
     return (
       <>
       <View style={styles.parentContainer}>
       <Slider 
           style={styles.slider} 
-          maximumValue={10} 
+          value={10}
+          maximumValue={100} 
           minimumValue={1}
           minimumTrackTintColor='#ffffff'
           maximumTrackTintColor='#000000'
           step={1}
           // vertical={true} investigate
-          onValueChange={(e)=>{
+          onSlidingComplete={(e)=>{
             setLocationParams({...locationParams, radius: e})
           }}
       />
-        <Mapframe locationParams={locationParams} />
+        <Mapframe locationParams={locationParams} setLocationParams={setLocationParams} currLocation={currLocation}/>
       </View>
       </>
     );

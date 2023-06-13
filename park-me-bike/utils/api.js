@@ -1,6 +1,7 @@
 export const fetchParking = (locationParams) => {
-    if (locationParams.currLocation) {
-        const URL = `https://api.cyclestreets.net/v2/pois.locations?type=cycleparking&longitude=${locationParams.currLocation.longitude}&latitude=${locationParams.currLocation.latitude}&radius=${locationParams.radius}&limit=10`
+    if (locationParams.location) {
+        // console.log(locationParams.radius)
+        const URL = `https://api.cyclestreets.net/v2/pois.locations?type=cycleparking&longitude=${locationParams.location.longitude}&latitude=${locationParams.location.latitude}&radius=${locationParams.radius}&limit=20`
         return fetch(URL, {
             method: "GET",
             headers: {

@@ -4,27 +4,36 @@ import MapView, { Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import { fetchParking } from '../utils/api';
 import ParkingLots from './ParkingLots';
 
-export default function MapFrame({locationParams}) {
+export default function Mapframe({locationParams, setLocationParams, currLocation}) {
     const [pointsOfInterest, setPointsOfInterest] = useState([])
-    const combinedDependency = [locationParams.currLocation || locationParams.radius]
+
   
     useEffect(() => {
       fetchParking(locationParams)
       .then(({features}) => {
             setPointsOfInterest([...features])
+            console.log(locationParams, "locationParams")
         })
       .catch(err => console.log(err))
-    }, combinedDependency)
 
-    if (locationParams.currLocation != null) {
+    }, [locationParams])
+
+    // console.log(locationParams)
+
+    if (locationParams.location != null) {
         return (
             <SafeAreaView style={{flex: 1}}>
                 <View style={styles.container}>
                     <MapView provider={PROVIDER_GOOGLE}
                         style={styles.mapStyle}
+                        onRegionChangeComplete={(e)=>{
+                            // console.log(e, "onregionchange")
+
+                            setLocationParams({...locationParams, location: {latitude: e.latitude, longitude: e.longitude}})
+                        }}
                         initialRegion={{
-                            latitude: locationParams.currLocation.latitude,
-                            longitude: locationParams.currLocation.longitude,
+                            latitude: locationParams.location.latitude,
+                            longitude: locationParams.location.longitude,
                             // latitudeDelta: 0.0922,
                             // longitudeDelta: 0.0421,
                             latitudeDelta: 0.1,
@@ -34,11 +43,12 @@ export default function MapFrame({locationParams}) {
                     >
                         <Marker
                             coordinate={{
-                            latitude: locationParams.currLocation.latitude,
-                            longitude: locationParams.currLocation.longitude,
+                            latitude: currLocation.latitude,
+                            longitude: currLocation.longitude,
                             }}
                             title={'Current Location'}
                             description={'Where you are at the moment.'}
+                            pinColor='#000000'
                         />
                     {
                         pointsOfInterest.map(({properties, geometry}) => {
