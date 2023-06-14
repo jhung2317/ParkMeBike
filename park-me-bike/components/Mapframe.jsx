@@ -40,6 +40,10 @@ export default function Mapframe({locationParams, setLocationParams, currLocatio
                             longitudeDelta: 0.1
 
                         }}
+                        animateToLocation({
+                            
+                        })
+                       
                     >
                         <Marker
                             coordinate={{

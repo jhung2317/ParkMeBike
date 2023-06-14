@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';// Import Map and Marker
 import Mapframe from './Mapframe';
 import * as Location from 'expo-location';
-import Slider from '@react-native-community/slider'
+import ControlPanel from './ControlPanel';
 
 
 
@@ -52,19 +52,7 @@ export default function Dashboard() {
     return (
       <>
       <View style={styles.parentContainer}>
-      <Slider 
-          style={styles.slider} 
-          value={10}
-          maximumValue={100} 
-          minimumValue={1}
-          minimumTrackTintColor='#ffffff'
-          maximumTrackTintColor='#000000'
-          step={1}
-          // vertical={true} investigate
-          onSlidingComplete={(e)=>{
-            setLocationParams({...locationParams, radius: e})
-          }}
-      />
+      <ControlPanel setLocationParams={setLocationParams} locationParams={locationParams}/>
         <Mapframe locationParams={locationParams} setLocationParams={setLocationParams} currLocation={currLocation}/>
       </View>
       </>
@@ -80,12 +68,4 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  slider: {
-    position: 'absolute',
-    // transform: [{rotate: '90deg'}],
-    top: 20,
-    left: 0,
-    zIndex: 3,
-    width: '100%',
-  }
 });
