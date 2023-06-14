@@ -4,21 +4,20 @@ import MapView, { Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import { fetchParking } from '../utils/api';
 import ParkingLots from './ParkingLots';
 
-export default function Mapframe({locationParams, setLocationParams, currLocation}) {
+export default function Mapframe({locationParams, setLocationParams, currLocation, parkingLimit}) {
     const [pointsOfInterest, setPointsOfInterest] = useState([])
 
   
     useEffect(() => {
-      fetchParking(locationParams)
+      fetchParking(locationParams, parkingLimit)
       .then(({features}) => {
+        console.log(features)
             setPointsOfInterest([...features])
             console.log(locationParams, "locationParams")
         })
       .catch(err => console.log(err))
 
-    }, [locationParams])
-
-    // console.log(locationParams)
+    }, [locationParams, parkingLimit])
 
     if (locationParams.location != null) {
         return (
@@ -31,19 +30,20 @@ export default function Mapframe({locationParams, setLocationParams, currLocatio
 
                             setLocationParams({...locationParams, location: {latitude: e.latitude, longitude: e.longitude}})
                         }}
+
                         initialRegion={{
-                            latitude: locationParams.location.latitude,
-                            longitude: locationParams.location.longitude,
+                            
                             // latitudeDelta: 0.0922,
                             // longitudeDelta: 0.0421,
                             latitudeDelta: 0.1,
                             longitudeDelta: 0.1
-
-                        }}
-                        animateToLocation({
-                            
-                        })
-                       
+                        }} 
+                        initialCamera={{
+                            latitude: locationParams.location.latitude,
+                            longitude: locationParams.location.longitude,
+                            latitudeDelta: 0.1,
+                            longitudeDelta: 0.1
+                        }}  
                     >
                         <Marker
                             coordinate={{

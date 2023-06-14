@@ -14,6 +14,8 @@ export default function Dashboard() {
     location: {...currLocation},
     radius: 10,
   });
+
+  const [parkingLimit, setParkingLimit] = useState(3)
  
   const [errorMsg, setErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(true)
@@ -52,8 +54,8 @@ export default function Dashboard() {
     return (
       <>
       <View style={styles.parentContainer}>
-      <ControlPanel setLocationParams={setLocationParams} locationParams={locationParams}/>
-        <Mapframe locationParams={locationParams} setLocationParams={setLocationParams} currLocation={currLocation}/>
+      <ControlPanel setLocationParams={setLocationParams} locationParams={locationParams} setParkingLimit={setParkingLimit}/>
+        <Mapframe locationParams={locationParams} setLocationParams={setLocationParams} currLocation={currLocation} parkingLimit={parkingLimit}/>
       </View>
       </>
     );
