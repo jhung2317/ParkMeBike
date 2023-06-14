@@ -2,21 +2,14 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';// Import Map and Marker
 import Mapframe from './Mapframe';
 import * as Location from 'expo-location';
-import ControlPanel from './ControlPanel';
-
-
 
 
 export default function Dashboard() {
   const [currLocation, setCurrLocation] = useState({});
-
   const [locationParams, setLocationParams] = useState({
     location: {...currLocation},
     radius: 10,
   });
-
-  const [parkingLimit, setParkingLimit] = useState(3)
- 
   const [errorMsg, setErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(true)
 
@@ -26,8 +19,18 @@ export default function Dashboard() {
         if (status !== 'granted') {
           setErrorMsg('Permission to access location was denied');
           return;
-        }
-      })
+        } else {
+          Location.watchPositionAsync(
+            {
+              // Tracking options
+              accuracy: Location.Accuracy.High,
+              distanceInterval: 10,
+            },
+            location => {
+             setCurrLocation(location)
+            })
+      }
+        })
       .then(() => {
         (Location.getCurrentPositionAsync({}))
       .then((location) => {
@@ -36,8 +39,7 @@ export default function Dashboard() {
         } else {
           setCurrLocation({    
             latitude: location.coords.latitude, longitude: location.coords.longitude
-          });
-          console.log(currLocation)
+          })
           setIsLoading(false)
         }
       })
@@ -49,17 +51,13 @@ export default function Dashboard() {
       <Text>Fetching cycleparking...</Text>
     )
   }
-
-  if (currLocation) {
     return (
       <>
       <View style={styles.parentContainer}>
-      <ControlPanel setLocationParams={setLocationParams} locationParams={locationParams} setParkingLimit={setParkingLimit}/>
-        <Mapframe locationParams={locationParams} setLocationParams={setLocationParams} currLocation={currLocation} parkingLimit={parkingLimit}/>
+        <Mapframe locationParams={locationParams} setLocationParams={setLocationParams} currLocation={currLocation}/>
       </View>
       </>
     );
-  }
 };
 
 const styles = StyleSheet.create({

@@ -1,7 +1,11 @@
 import {StyleSheet, View, Text} from 'react-native'
-import Slider from '@react-native-community/slider'
+// import Slider from '@react-native-community/slider'
+import { Slider } from '@rneui/themed';
+
+
 
 const ControlPanel = ({setLocationParams, locationParams, setParkingLimit})=>{
+   
     return (
         <>
         <View style={styles.sliderWrapper}>
@@ -13,6 +17,7 @@ const ControlPanel = ({setLocationParams, locationParams, setParkingLimit})=>{
         minimumValue={1}
         minimumTrackTintColor='#ffffff'
         maximumTrackTintColor='#000000'
+        orientation='vertical'
         step={1}
         onSlidingComplete={(e)=>{
           setLocationParams({...locationParams, radius: e})
@@ -25,12 +30,13 @@ const ControlPanel = ({setLocationParams, locationParams, setParkingLimit})=>{
         minimumValue={1}
         minimumTrackTintColor='#ffffff'
         maximumTrackTintColor='#000000'
+        // orientation='vertical'
         step={1}
         onSlidingComplete={(e)=>{
-            console.log(e)
           setParkingLimit(e)
         }}
     />
+    
     </View>
     </>
     )
@@ -39,9 +45,8 @@ const ControlPanel = ({setLocationParams, locationParams, setParkingLimit})=>{
 const styles = StyleSheet.create({
     sliderWrapper: {
         position: 'absolute',
-        // transform: [{rotate: '90deg'}],
         top: 20,
-        left: 0,
+        left: 50,
         zIndex: 3,
         width: '100%',
       }

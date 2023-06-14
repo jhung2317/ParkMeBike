@@ -1,7 +1,5 @@
 export const fetchParking = (locationParams, limit) => {
-    console.log(limit, "limit")
     if (locationParams.location) {
-        // console.log(locationParams.radius)
         const URL = `https://api.cyclestreets.net/v2/pois.locations?type=cycleparking&longitude=${locationParams.location.longitude}&latitude=${locationParams.location.latitude}&radius=${locationParams.radius}&limit=${limit}`
         return fetch(URL, {
             method: "GET",

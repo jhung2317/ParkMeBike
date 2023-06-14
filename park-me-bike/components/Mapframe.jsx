@@ -3,21 +3,25 @@ import { SafeAreaView, StyleSheet, Text, View } from 'react-native';// Import Ma
 import MapView, { Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import { fetchParking } from '../utils/api';
 import ParkingLots from './ParkingLots';
+import ControlPanel from './ControlPanel';
 
-export default function Mapframe({locationParams, setLocationParams, currLocation, parkingLimit}) {
+export default function Mapframe({locationParams, setLocationParams, currLocation}) {
     const [pointsOfInterest, setPointsOfInterest] = useState([])
+    const [parkingLimit, setParkingLimit] = useState(3)
 
   
     useEffect(() => {
       fetchParking(locationParams, parkingLimit)
       .then(({features}) => {
-        console.log(features)
+        console.log(features[0].properties, "features")
             setPointsOfInterest([...features])
-            console.log(locationParams, "locationParams")
         })
       .catch(err => console.log(err))
-
     }, [locationParams, parkingLimit])
+
+
+
+    
 
     if (locationParams.location != null) {
         return (
@@ -26,11 +30,9 @@ export default function Mapframe({locationParams, setLocationParams, currLocatio
                     <MapView provider={PROVIDER_GOOGLE}
                         style={styles.mapStyle}
                         onRegionChangeComplete={(e)=>{
-                            // console.log(e, "onregionchange")
-
                             setLocationParams({...locationParams, location: {latitude: e.latitude, longitude: e.longitude}})
                         }}
-
+                        showsUserLocation={true}
                         initialRegion={{
                             
                             // latitudeDelta: 0.0922,
@@ -45,21 +47,13 @@ export default function Mapframe({locationParams, setLocationParams, currLocatio
                             longitudeDelta: 0.1
                         }}  
                     >
-                        <Marker
-                            coordinate={{
-                            latitude: currLocation.latitude,
-                            longitude: currLocation.longitude,
-                            }}
-                            title={'Current Location'}
-                            description={'Where you are at the moment.'}
-                            pinColor='#000000'
-                        />
                     {
                         pointsOfInterest.map(({properties, geometry}) => {
                              return <ParkingLots properties={properties} geometry={geometry} key={properties.id} />
                         })
                     }
                     </MapView>
+                    <ControlPanel setLocationParams={setLocationParams} locationParams={locationParams} setParkingLimit={setParkingLimit}/>
                 </View>
             </SafeAreaView>
         )
