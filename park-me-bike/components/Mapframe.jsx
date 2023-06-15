@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';// Import Map and Marker
+import { SafeAreaView, StyleSheet, Text, View, Pressable, Modal, Button} from 'react-native';// Import Map and Marker
 import MapView, { Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import { fetchParking } from '../utils/api';
 import ParkingLots from './ParkingLots';
@@ -8,6 +8,7 @@ import ControlPanel from './ControlPanel';
 export default function Mapframe({locationParams, setLocationParams, currLocation}) {
     const [pointsOfInterest, setPointsOfInterest] = useState([])
     const [parkingLimit, setParkingLimit] = useState(3)
+    const [modalVisible, setModalVisible] = useState(false)
 
   
     useEffect(() => {
@@ -53,7 +54,17 @@ export default function Mapframe({locationParams, setLocationParams, currLocatio
                         })
                     }
                     </MapView>
-                    <ControlPanel setLocationParams={setLocationParams} locationParams={locationParams} setParkingLimit={setParkingLimit}/>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                        setModalVisible(!modalVisible);
+                        }}>
+                    <ControlPanel setLocationParams={setLocationParams} locationParams={locationParams} parkingLimit={parkingLimit} setParkingLimit={setParkingLimit} setModalVisible={setModalVisible}/>
+                    </Modal>
+                        <Button onPress={()=> setModalVisible(!modalVisible)} title="ControlPanel">Press me</Button>
                 </View>
             </SafeAreaView>
         )

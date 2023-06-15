@@ -1,6 +1,7 @@
-import { Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Image } from 'react-native';// Import Map and Marker
+import { Marker, Callout } from 'react-native-maps';
+import { StyleSheet, Text, View, Image} from 'react-native';// Import Map and Marker
 import bikeParkingIconSVG from '../assets/bikeParkIconSVG.svg'
+
 export default function ParkingLots({properties, geometry}) {
     return (
        
@@ -12,7 +13,9 @@ export default function ParkingLots({properties, geometry}) {
                 }}
                 title={properties.name}
             >
-            <Image style={styles.thumbnail} source={{uri: `https://maps.googleapis.com/maps/api/streetview?size=800x800&location=${geometry.coordinates[1]},${geometry.coordinates[0]}&fov=80&heading=70&pitch=0&key=AIzaSyC8A14aH5FwMCQ9JYtDh9mPp0IFxKSdmT4`}}/>   
+            <Callout>
+            <Image style={styles.thumbnail} source={{uri: `https://maps.googleapis.com/maps/api/streetview?size=800x800&location=${geometry.coordinates[1]},${geometry.coordinates[0]}&fov=80&heading=70&pitch=0&key=AIzaSyC8A14aH5FwMCQ9JYtDh9mPp0IFxKSdmT4`}}/> 
+            </Callout>  
 
             </Marker>
             
@@ -22,8 +25,8 @@ export default function ParkingLots({properties, geometry}) {
 
 const styles = StyleSheet.create({
     thumbnail: {
-        width: 50,
-        height: 50
+        width: 200,
+        height: 200
     }
 })
 
