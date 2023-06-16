@@ -1,5 +1,6 @@
 import { HomeScreen, UserProfile } from '../screens';
 import Dashboard from '../screens/Dashboard';
+import AboutUs from '../screens/AboutUs'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import React, { useContext } from 'react';
@@ -38,6 +39,8 @@ export const AppStack = () => {
             iconName = focused ? 'list' : 'list-outline';
           } else if (route.name === 'Dashboard') {
             iconName = focused ? 'map' : 'map-outline';
+          } else if (route.name === 'About') {
+            iconName = focused ? 'list' : 'list-outline'
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -66,6 +69,7 @@ export const AppStack = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="UserProfile" component={UserProfileWithAuth} />
       <Tab.Screen name="Dashboard" component={Dashboard} />
+      <Tab.Screen name="About_us" component={AboutUs}/>
     </Tab.Navigator>
   );
 };
