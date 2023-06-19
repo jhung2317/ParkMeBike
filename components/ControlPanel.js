@@ -72,6 +72,7 @@ const ControlPanel = ({
           }}
         />
         <Text style={styles.label}>{parkingLimit} bike parks</Text>
+        <View style={styles.checkBoxStyle}>
         <CheckBox
           title="show route"
           checked={showRoute}
@@ -82,6 +83,7 @@ const ControlPanel = ({
           checked={showTraffic}
           onPress={() => setShowTraffic(!showTraffic)}
         />
+        </View>
         <Button
           title="close"
           onPress={() => {
@@ -121,12 +123,18 @@ const styles = StyleSheet.create({
   },
   label: {
     color: 'white',
+    top: 5,
+    bottom: 10
   },
   heading: {
     padding: 10,
     color: 'white',
     fontSize: 20,
   },
+  checkBoxStyle: {
+    top: 10,
+    bottom: 10,
+  }
 });
 
 export default ControlPanel;

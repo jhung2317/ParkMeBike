@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Image, Platform, Button, Toast} from 'react-nat
 import {WebView} from 'react-native-webview'
 import {useState, useEffect} from 'react'
 import {fetchPollution} from '../utils/api'
+import { auth, db } from '../config';
+import { setDoc, doc } from '@firebase/firestore';
 
 
 export default function ParkingLots({properties, geometry, destination, setDestination}) {
@@ -18,6 +20,15 @@ export default function ParkingLots({properties, geometry, destination, setDesti
         fetchPollution(geometry.coordinates[1], geometry.coordinates[0])
         .then(({list})=>{setShowPollution(list[0].main.aqi)})
     },[geometry])
+
+    const saveGeoLocation = () => {
+        const uid = auth.currentUser.uid;
+        const userBikeGeoRef = doc(db, 'users', uid, "bikeGeo");
+        setDoc(userBikeGeoRef, {
+          latitude: geometry.coordinates[1],
+          longitude: geometry.coordinates[0],
+        })
+      }
 
     return (
         <>
@@ -35,10 +46,14 @@ export default function ParkingLots({properties, geometry, destination, setDesti
                     : AIRPOLLUTIONMARKER.bad
                 }
                 onPress={(e)=>{setDestination(e.nativeEvent.coordinate)}}
-                onCalloutPress={()=>console.log(geometry.coordinates)}
+                onCalloutPress={()=>{
+                    console.log(geometry.coordinates)
+                    saveGeoLocation()}}
                 
             >
-            <Callout onPress={()=>{console.log(geometry.coordinates)}}>
+            <Callout onPress={()=>{
+                console.log(geometry.coordinates)
+                saveGeoLocation()}}>
             <Text>Park Here</Text>
             <View>
             {
