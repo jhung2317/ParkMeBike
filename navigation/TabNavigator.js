@@ -1,6 +1,7 @@
 import { HomeScreen, UserProfile } from '../screens';
 import SettingsScreen from '../screens/SettingsScreen';
 import Dashboard from '../screens/Dashboard';
+import AboutUs from '../screens/AboutUs'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { useContext } from 'react';
@@ -38,6 +39,8 @@ const TabNavigator = () => (
           iconName = focused ? 'map' : 'map-outline';
         } else if (route.name === 'Settings') {
           iconName = focused ? 'settings' : 'settings-outline';
+        } else if (route.name === 'AboutUs') {
+          iconName = focused ? "list" : "list-outline";
         }
 
         return <Ionicons name={iconName} size={size} color={color} />;
@@ -62,6 +65,7 @@ const TabNavigator = () => (
     <Tab.Screen name="UserProfile" component={UserProfileWithAuth} />
     <Tab.Screen name="Cool stuff" component={HomeScreen} />
     <Tab.Screen name="Settings" component={SettingsScreen} />
+    <Tab.Screen name="About_Us" component={AboutUs} />
   </Tab.Navigator>
 );
 
