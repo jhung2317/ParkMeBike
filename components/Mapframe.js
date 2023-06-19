@@ -31,24 +31,24 @@ export default function Mapframe({
   })
   const [showRoute, setShowRoute] = useState(false)
   const [showTraffic, setShowTraffic] = useState(false)
-  const [sound, setSound] = useState();
+  const [ratchetBellSound, setRachetBellSound] = useState();
 
-  async function playSound(){
+  async function playRachetBell(){
     console.log('Loading sound');
-    const {sound} = await Audio.Sound.createAsync(require('../assets/bell.mp3'), 
+    const {ratchetBellSound} = await Audio.Sound.createAsync(require('../assets/bellcutup.mp3'), 
     {shouldPlay: true}
     );
-    setSound(sound);
+    setRachetBellSound(ratchetBellSound);
   }
 
   useEffect(()=>{
-    return sound
+    return ratchetBellSound
     ? () => {
       console.log('unloading sound')
       sound.unloadAsync()
     }
     : undefined;
-  }, [sound])
+  }, [ratchetBellSound])
   
 
 
@@ -136,11 +136,12 @@ export default function Mapframe({
             setShowRoute={setShowRoute}
             showTraffic={showTraffic}
             setShowTraffic={setShowTraffic}
+            ratchetBellSound={ratchetBellSound}
           />
         </Modal>
         <Pressable style={styles.controlButton}
           onPress={() => {
-            playSound()
+            playRachetBell()
             setModalVisible(!modalVisible)
             }}
         >

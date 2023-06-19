@@ -1,6 +1,8 @@
 import { StyleSheet, View, Text, Pressable, Button } from 'react-native';
 import { Slider, Icon, CheckBox } from '@rneui/themed';
 import { color } from 'react-native-reanimated';
+import {Audio} from 'expo-av'
+import {useState, useEffect} from 'react'
 
 const ControlPanel = ({
   setLocationParams,
@@ -12,7 +14,26 @@ const ControlPanel = ({
   setShowTraffic,
   showRoute,
   setShowRoute,
+  ratchetBellSound
 }) => {
+  const [pingBellSound, setPingBellSound] = useState();
+
+  async function playPingBell(){
+    console.log('Loading sound');
+    const {pingBellSound} = await Audio.Sound.createAsync(require('../assets/bellping.mp3'), 
+    {shouldPlay: true}
+    );
+    setPingBellSound(pingBellSound);
+  }
+
+  useEffect(()=>{
+    return ratchetBellSound
+    ? () => {
+      console.log('unloading sound')
+      sound.unloadAsync()
+    }
+    : undefined;
+  }, [pingBellSound])
   return (
     <>
       <View style={styles.sliderWrapper}>
@@ -88,6 +109,7 @@ const ControlPanel = ({
           title="close"
           onPress={() => {
             setModalVisible(false);
+            playPingBell()
           }}
         >
           Close
