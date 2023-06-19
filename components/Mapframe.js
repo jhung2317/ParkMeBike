@@ -15,6 +15,7 @@ import ParkingLots from './ParkingLots';
 import ControlPanel from './ControlPanel';
 import MapViewDirections from 'react-native-maps-directions'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import {Audio} from 'expo-av'
 
 export default function Mapframe({
   locationParams,
@@ -30,6 +31,24 @@ export default function Mapframe({
   })
   const [showRoute, setShowRoute] = useState(false)
   const [showTraffic, setShowTraffic] = useState(false)
+  const [sound, setSound] = useState();
+
+  async function playSound(){
+    console.log('Loading sound');
+    const {sound} = await Audio.Sound.createAsync(require('../assets/bell.mp3'), 
+    {shouldPlay: true}
+    );
+    setSound(sound);
+  }
+
+  useEffect(()=>{
+    return sound
+    ? () => {
+      console.log('unloading sound')
+      sound.unloadAsync()
+    }
+    : undefined;
+  }, [sound])
   
 
 
@@ -120,7 +139,10 @@ export default function Mapframe({
           />
         </Modal>
         <Pressable style={styles.controlButton}
-          onPress={() => setModalVisible(!modalVisible)}
+          onPress={() => {
+            playSound()
+            setModalVisible(!modalVisible)
+            }}
         >
         <Icon size={35} name={'sliders'} style={styles.iconStyle}/>
         </Pressable>

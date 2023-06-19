@@ -5,6 +5,7 @@ import {useState, useEffect} from 'react'
 import {fetchPollution} from '../utils/api'
 import { auth, db } from '../config';
 import { setDoc, doc } from '@firebase/firestore';
+import {collection} from 'firebase/firestore'
 
 
 export default function ParkingLots({properties, geometry, destination, setDestination}) {
@@ -23,7 +24,7 @@ export default function ParkingLots({properties, geometry, destination, setDesti
 
     const saveGeoLocation = () => {
         const uid = auth.currentUser.uid;
-        const userBikeGeoRef = doc(db, 'users', uid, "bikeGeo");
+        const userBikeGeoRef = collection(db, 'users', uid, "bikeGeo");
         setDoc(userBikeGeoRef, {
           latitude: geometry.coordinates[1],
           longitude: geometry.coordinates[0],
