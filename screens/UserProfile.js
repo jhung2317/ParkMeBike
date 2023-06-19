@@ -8,6 +8,7 @@ import {
   Button,
   Pressable,
   Modal,
+  Alert
 } from 'react-native';
 import { collection, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import * as ImagePicker from 'expo-image-picker';
@@ -17,7 +18,8 @@ import { db } from '../config';
 import { auth } from '../config'
 import { signOut } from 'firebase/auth';
 
-const DeleteUserProfile = ({ onPress }) => (
+const DeleteUserProfile = ({onPress}) => (
+
   <Button title="Delete Profile" onPress={onPress} color="red" />
 );
 
@@ -107,7 +109,6 @@ export const UserProfile = ({ userId }) => {
           alert('Permission to access camera roll is required!');
           return;
         }
-
         return ImagePicker.launchImageLibraryAsync();
       })
       .then((pickerResult) => {
@@ -188,9 +189,38 @@ export const UserProfile = ({ userId }) => {
        console.log("error deleting your profile");
      }
    };
+  // const deleteAccount = async () => {
+  //   try {
+  //     await auth.currentUser.delete();
+  //     console.log("deleted");
+  //   } catch (error) {
+  //     console.log("not deleted");
+  //   }
+  // };
+
   const deleteAccount = async () => {
     try {
-      await auth.currentUser.delete();
+      const confrimDeletion = await new Promise((resolve) => {
+        Alert.alert('Delete Account',
+          'Are you sure you want to delete your account?', [
+            {
+              text: 'No',
+              style: 'cancel',
+              onPress: () => resolve(false),
+            },
+            {
+              text: 'yes',
+              style: 'destructive',
+              onPress: () => resolve(true),
+            },
+            
+        ],
+          { cancelable: false}
+        )
+      })
+      if (confrimDeletion) {
+        await auth.currentUser.delete();
+      }
       console.log("deleted");
     } catch (error) {
       console.log("not deleted");
