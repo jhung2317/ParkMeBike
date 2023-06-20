@@ -9,12 +9,14 @@ export const Colors = {
   
 export const Theme = {
   light: {
+    name: 'light',
     background: Colors.white,
     text: Colors.black,
     primary: Colors.blue,
     
   },
   dark: {
+    name: 'dark',
     background: Colors.black,
     text: Colors.white,
     primary: Colors.orange,

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { db, collection, getDocs, addDoc, doc } from '../config/firebase';
 import { getAuth } from 'firebase/auth';
 import * as Location from 'expo-location';
+import {ThemeContext} from '../providers/ThemeProvider'
 
 export const ParkingHistory = () => {
+  const {theme, toggleTheme} = useContext(ThemeContext);
   const [parkingSpots, setParkingSpots] = useState([]);
 
   const auth = getAuth();
@@ -60,7 +62,7 @@ export const ParkingHistory = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: theme.background}}>
       {parkingSpots.map((spot) => (
         <View key={spot.id} style={styles.spotContainer}>
           <Text style={styles.spotName}>{spot.name}</Text>

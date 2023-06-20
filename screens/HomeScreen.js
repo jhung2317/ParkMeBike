@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config';
+import { ThemeContext } from '../providers/ThemeProvider';
 
 export const HomeScreen = ({ navigation }) => {
+  const {theme, toggleTheme} = useContext(ThemeContext)
   const handleLogout = () => {
     signOut(auth).catch((error) => console.log('Error logging out: ', error));
   };
@@ -13,7 +15,7 @@ export const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: theme.background}}>
       <TouchableOpacity style={styles.button} onPress={goToHistoryScreen}>
         <Text style={styles.buttonText}>History</Text>
       </TouchableOpacity>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -23,8 +23,9 @@ import uuid from 'uuid';
 import { db } from '../config';
 import { auth } from '../config';
 import { FontAwesome } from '@expo/vector-icons';
-
 import { signOut } from 'firebase/auth';
+import {ThemeContext} from '../providers/ThemeProvider'
+import { ThemeProvider } from '@react-navigation/native';
 
 const DeleteUserProfile = ({ onPress }) => (
   <Button title="Delete Profile" onPress={onPress} color="red" />
@@ -72,6 +73,7 @@ const uploadBikeImageAsync = (uri) => {
 };
 
 export const UserProfile = ({ userId }) => {
+  const {theme, toggleTheme} = useContext(ThemeContext)
   const [user, setUser] = useState(null);
   const [newName, setNewName] = useState('');
   const [newLocation, setNewLocation] = useState('');
@@ -237,14 +239,14 @@ export const UserProfile = ({ userId }) => {
 
   if (!user) {
     return (
-      <View style={styles.container}>
+      <View style={{...styles.container, backgroundColor: theme.background}}>
         <Text>Loading user profile...</Text>
       </View>
     );
   }
 
   return (
-  <View style={styles.container}>
+  <View style={{...styles.container, backgroundColor: theme.background}}>
     <View style={styles.profilePictureContainer}>
       {newProfileImage ? (
         <Image source={{ uri: newProfileImage }} style={styles.profileImage} />

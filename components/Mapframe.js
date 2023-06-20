@@ -96,9 +96,9 @@ export default function Mapframe({
                              return <ParkingLots properties={properties} geometry={geometry} key={properties.id} destination={destination} setDestination={setDestination}/>
                         })
                     }
-                    <Marker
+                    {/* <Marker
                       coordinate={currLocation}
-                    />
+                    /> */}
                     { 
                         showRoute && destination.latitude
                       ? <>
@@ -109,7 +109,7 @@ export default function Mapframe({
                       strokeWidth={4}
                       strokeColor='#111111'
                       mode='BICYCLING'
-                      onReady={(result)=>{}}
+                      onReady={(result)=>{console.log(result)}}
                     /> 
                       </>
                       :

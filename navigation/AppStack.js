@@ -20,7 +20,6 @@ export const AppStack = () => {
           headerTitle: (props) => <HeaderTitle {...props} theme={theme} />,
           headerStyle: {
             backgroundColor: theme.background,
-            // color: theme.text,
             height: 80,
           },
           headerTintColor: theme.text,
