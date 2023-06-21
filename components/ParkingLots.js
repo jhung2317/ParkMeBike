@@ -1,4 +1,4 @@
-import { Marker, Callout, CalloutSubview } from 'react-native-maps';
+import { Marker, Callout, CalloutSubview } from "react-native-maps";
 import {
   StyleSheet,
   Text,
@@ -7,12 +7,12 @@ import {
   Platform,
   Button,
   Toast,
-} from 'react-native'; // Import Map and Marker
-import { WebView } from 'react-native-webview';
-import { useState, useEffect } from 'react';
-import { fetchPollution } from '../utils/api';
-import { auth, db, collection, addDoc, setDoc, doc } from '../config';
-import { serverTimestamp } from '@firebase/firestore';
+} from "react-native"; // Import Map and Marker
+import { WebView } from "react-native-webview";
+import { useState, useEffect } from "react";
+import { fetchPollution } from "../utils/api";
+import { auth, db } from "../config";
+import { setDoc, doc, serverTimestamp } from "@firebase/firestore";
 
 export default function ParkingLots({
   properties,
@@ -25,9 +25,9 @@ export default function ParkingLots({
   const [showPollution, setShowPollution] = useState(null);
 
   const AIRPOLLUTIONMARKER = {
-    good: 'green',
-    ok: 'orange',
-    bad: 'black',
+    good: "green",
+    ok: "orange",
+    bad: "black",
   };
 
   useEffect(() => {
@@ -39,33 +39,69 @@ export default function ParkingLots({
   }, [geometry]);
 
   const saveGeoLocation = () => {
-    const uid = auth.currentUser.uid;
-
-    const userBikeGeoRef = doc(db, 'users', uid, 'bikeGeo', 'bikeLocation');
-
-    const userParkingHistoryRef = collection(
-      db,
-      'users',
-      uid,
-      'parkingHistory'
+    Alert.alert(
+      "Save Location?",
+      "Are you sure you want to save your location?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Okay",
+          onPress: () => {
+            const uid = auth.currentUser.uid;
+            const userBikeGeoRef = doc(
+              db,
+              "users",
+              uid,
+              "bikeGeo",
+              "bikeLocation"
+            );
+            setDoc(userBikeGeoRef, {
+              latitude: geometry.coordinates[1],
+              longitude: geometry.coordinates[0],
+              timestamp: serverTimestamp(),
+            })
+              .then((parkingSpotRef) => {
+                console.log("Parking spot saved with ID:");
+              })
+              .catch((error) => {
+                console.log("Error saving parking spot:", error);
+              });
+          },
+        },
+      ]
     );
+  };
 
-    const locationData = {
-      latitude: geometry.coordinates[1],
-      longitude: geometry.coordinates[0],
-      timestamp: serverTimestamp(),
-    };
+  const locationData = {
+    latitude: geometry.coordinates[1],
+    longitude: geometry.coordinates[0],
+    timestamp: serverTimestamp(),
+  };
 
-    // Save  bikeLocation
-    setDoc(userBikeGeoRef, locationData)
-      .then(() => {
-        console.log('Bike location saved.');
-      })
-      .catch((error) => {
-        console.log('Error saving bike location:', error);
+  // Save  bikeLocation
+  setDoc(userBikeGeoRef, locationData)
+    .then(() => {
+      console.log("Bike location saved.");
+    })
+    .catch((error) => {
+      console.log("Error saving bike location:", error);
+    });
+
+  // Save parking history
+  addDoc(userParkingHistoryRef, locationData)
+    .then((parkingSpotRef) => {
+      setIsParked({
+        latitude: geometry.coordinates[1],
+        longitude: geometry.coordinates[0],
+        parked: true,
       });
+      console.log("Parking spot saved with ID:", parkingSpotRef.id);
+    })
+    .catch((error) => {
+      console.log("Error saving parking spot:", error);
+    });
 
-    // Save parking history
+  if (!isParked.parked) {
     addDoc(userParkingHistoryRef, locationData)
       .then((parkingSpotRef) => {
         setIsParked({
@@ -73,38 +109,19 @@ export default function ParkingLots({
           longitude: geometry.coordinates[0],
           parked: true,
         });
-        console.log('Parking spot saved with ID:', parkingSpotRef.id);
+        console.log("Parking spot saved with ID:", parkingSpotRef.id);
       })
       .catch((error) => {
-        console.log('Error saving parking spot:', error);
+        console.log("Error saving parking spot:", error);
       });
-
-    // if(!isParked.parked){
-    //   setDoc(userBikeGeoRef, {
-    //     latitude: geometry.coordinates[1],
-    //     longitude: geometry.coordinates[0],
-    //     timestamp: serverTimestamp(),
-    //   })
-    //     .then((parkingSpotRef) => {
-    //       setIsParked({
-    //         latitude: geometry.coordinates[1],
-    //         longitude: geometry.coordinates[0],
-    //         parked: true
-    //       });
-    //       console.log("Parking spot saved with ID:", parkingSpotRef);
-    //     })
-    //     .catch((error) => {
-    //       console.log("Error saving parking spot:", error);
-    //     });
-    //   } else {
-    //     setIsParked({
-    //       latitude: null,
-    //       longitude: null,
-    //       parked: false
-    //     });
-    //     console.log("you got your bike back!");
-    //   }
-  };
+  } else {
+    setIsParked({
+      latitude: null,
+      longitude: null,
+      parked: false,
+    });
+    console.log("you got your bike back!");
+  }
 
   return (
     <>
@@ -143,7 +160,7 @@ export default function ParkingLots({
             <Text>Park Here</Text>
           )}
           <View>
-            {Platform.OS === 'ios' ? (
+            {Platform.OS === "ios" ? (
               <Image
                 style={styles.thumbnail}
                 source={{

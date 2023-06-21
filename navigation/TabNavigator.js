@@ -1,4 +1,5 @@
-import { AboutUs, UserProfile } from '../screens';
+import { UserProfile } from '../screens';
+import { AboutUs } from '../screens';
 import SettingsScreen from '../screens/SettingsScreen';
 import Dashboard from '../screens/Dashboard';
 import Ionicons from 'react-native-vector-icons/Ionicons';
